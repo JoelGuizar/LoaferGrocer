@@ -5,10 +5,12 @@ const Todo = mongoose.model('Todo', {
     type: String
   },
   complete: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   completedAt: {
-    type: Number
+    type: Number,
+    default: null
   }
 })//mongoose model so mongoose knows how to store our Data,
 // first arg = name of mondel, second = object to specify the model

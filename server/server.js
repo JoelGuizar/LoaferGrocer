@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser'); //takes your JSON and turns it into an Obj
 const {mongoose} = require('./db/mongoose.js');
-const {Todo} = require ('./models/todo.js');
+var {Todo} = require ('./models/todo.js');
 const {User} = require('./models/user.js');
 
 const app = express();
@@ -13,14 +13,16 @@ const PORT = 3000;
 app.use(bodyParser.json()); // the bodyparser method we are using
 
 app.post('/todos', (req, res) => {
-  const todo = new Todo({
-    text: req.body.text,
+  var todo = new Todo({
+    text: req.body.text
   })
 
+  console.log(req.body.text);
+
   todo.save().then((doc) => {
-    console.log(doc);
+    res.send(doc)
   }, (e) => {
-    console.log('uh oh!');
+    res.status(400).send(e)
   })
 })
 
