@@ -4,5 +4,5 @@ mongoose.Promise = global.Promise //we have to describe that we are gonna use th
 mongoose.connect('mongodb://localhost:27017/TodoApp') //stays connected
 
 module.exports = {
-  
+  mongoose: mongoose
 }
