@@ -26,6 +26,12 @@ app.post('/todos', (req, res) => {
   })
 })
 
+app.get('/todos', (req, res) => {
+  Todo.find().then((todos) => {
+    res.send({todos}) // don't just send an array, by putting it in an object you are more flexible to add more properties to the response
+  }, (e) => {res.status(400).send(e)})
+})
+
 
 
 app.listen(PORT, () => {
