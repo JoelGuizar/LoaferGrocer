@@ -10,6 +10,20 @@ var id = '59a66f7e46493465d5b49a24';
 if (!ObjectId.isValid(id)){
   console.log('ID FUHHH');
 }
+
+let id = '59a5fffa97e6d55c256b5799'
+
+User.find({
+  _id:id
+}).then((users) => {
+  console.log('Users found', users);
+})
+
+User.findById(id).then((users) => {
+  if (!users) return console.log('User not found');
+  console.log(users);
+}).catch((e) => console.log(e))
+
 // Todo.find({
 //   _id: id //mongoose doesnt require you to pass in new ObjectID unlike mongoose
 // }).then((todos) => {
@@ -22,9 +36,11 @@ if (!ObjectId.isValid(id)){
 //   console.log('Todos find one', todos);
 // })
 
-Todo.findById(id).then((todos) => {
-  if (!todos){
-    return console.log(('ID not found', todos));
-  }
-  console.log('Todos find by ID', todos)
-}).catch((e) => console.log(e))
+
+//
+// Todo.findById(id).then((todos) => {
+//   if (!todos){
+//     return console.log(('ID not found', todos));
+//   }
+//   console.log('Todos find by ID', todos)
+// }).catch((e) => console.log(e))
