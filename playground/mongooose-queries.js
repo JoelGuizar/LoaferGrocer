@@ -3,12 +3,12 @@ const {mongoose} = require('./../server/db/mongoose');
 const {Todo} = require('./../server/models/todo');
 const {User} = require('./../server/models/user');
 
-var id = '59a66f7e46493465d5b49a24';
+//var id = '59a66f7e46493465d5b49a24';
 //ObjectId.isValid//return a boolean dependent is object ID is valid
 
 
 if (!ObjectId.isValid(id)){
-  console.log('ID FUHHH');
+  console.log('ID FUHHH MUH LIFE');
 }
 
 let id = '59a5fffa97e6d55c256b5799'

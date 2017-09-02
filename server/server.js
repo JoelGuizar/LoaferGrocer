@@ -36,16 +36,14 @@ app.get('/todos', (req, res) => {
 app.get('/todos/:id', (req, res) => {
   let id = req.params.id //will take the params.id from the request body, which is the :id
     if (!ObjectId.isValid(id)){
-      res.status(404).send();
-      return console.log('LOL this doesnt exist');
+      return res.status(404).send();
     }
 
-    Todo.findById(id).then((docs) => {
-      if (docs){
-        res.status(200).send(docs);
-        return console.log('SUCCESS!!!', docs);
+    Todo.findById(id).then((todo) => {
+      if (!todo){
+        return res.status(404).send();
       }
-      res.send(404)
+      res.send({todo})
     }).catch(e => {res.status(400).send()})
 })
 
