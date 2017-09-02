@@ -97,3 +97,39 @@ describe('GET /todos/:id', ()=>{
   })
 
 })
+
+describe('DELETE /todos/:id', () =>{
+  it('should remove a todo', (done) => {
+    var hexID = todos[1]._id.toHexString();
+
+    request(app)
+      .delete(`/todos/${hexID}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.todo._id).toBe(hexID)
+        })
+        .end((err, res) => {
+          if (err) return done(err) //so error gets rendered by mocha
+
+          Todo.findById(hexID).then((doc) =>{
+            expect(todo).toNotExist();
+            done();
+          }).catch(e => done(e))
+        })
+  });
+
+  it('should return 404 if todo not found', (done) =>{
+    let nid = new ObjectId().toHexString()
+    request(app)
+      .delete(`/todos/${nid}`)  //make a new ID and see if its not found
+      .expect(404)
+      .end(done)
+  });
+
+  it('should return 404 if object id is invalid', (done) =>{
+    request(app)
+      .delete('/todos/123abc') ///a bad url for IDs
+      .expect(404)
+      .end(done)
+  });
+})
