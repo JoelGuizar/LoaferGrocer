@@ -6,7 +6,7 @@ const {User} = require('./models/user.js');
 const {ObjectId} = require('mongodb');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3000 || process.env.PORT //this process.env.port is how heroku can set the port for hosting
 
 // app.use(bodyParser.urlencoded({
 //   extended: true
