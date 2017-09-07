@@ -133,3 +133,26 @@ describe('DELETE /todos/:id', () =>{
       .end(done)
   });
 })
+
+describe('PATCH /todos/:id' () => {
+  it('should update the mongo database', (done) => {
+    var hexID = todos[1]._id.toHexString();
+    request(app)
+      .patch(`/todos/${hexID}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo._id).toBe(hexID)
+      })
+      .end((err, result) => {
+        
+      }).catch(e => done(e))
+  })
+
+  it('should return 404 if object id isnt valid', (done) => {
+    let nid = new ObjectId().toHexString()
+    request(app)
+      .patch(`/todos/${nid}`)
+      .expect(404)
+      .end(done)
+  })
+})
