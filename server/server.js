@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('lodash');
 const bodyParser = require('body-parser'); //takes your JSON and turns it into an Obj
 const {mongoose} = require('./db/mongoose.js');
 const {Todo} = require ('./models/todo.js');
@@ -60,6 +61,30 @@ app.delete('/todos/:id', (req, res) => {
 
     res.status(200).send({todo})
   }).catch(e => res.status(400).send())
+})
+
+app.patch('/todos/:id', (req, res) => {
+  const id = req.params.id;
+  let body = _.pick(req.body, ['text', 'completed']) //takes obj, then array of properties you cann pull off
+
+  if(!ObjectId.isValid(id)){
+    return res.status(404).send();
+  }
+
+  if (_.isBoolean(body.completed) && body.completed){
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+  Todo.findByIdAndUpdate(id, {$set:body}, {new:true}).then((todo) => {
+    if (!todo) {
+      return res.status(404).send();
+    }
+  }).catch((e) => {
+    res.status(400).send();
+  }) //methods for updating
 })
 
 
