@@ -1,4 +1,5 @@
 const express = require('express');
+const env = process.env.NODE_ENV || 'development'; //heroku
 const _ = require('lodash');
 const bodyParser = require('body-parser'); //takes your JSON and turns it into an Obj
 const {mongoose} = require('./db/mongoose.js');
@@ -8,6 +9,15 @@ const {ObjectId} = require('mongodb');
 
 const app = express();
 const PORT = 3000 || process.env.PORT //this process.env.port is how heroku can set the port for hosting
+
+if (env === 'development'){
+  process.env.PORT = 3000;
+  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp'
+} else if (env === 'test'){
+  process.env.PORT = 3000;
+  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest' // if /else statement dependendent on which mode you are on!
+}
+
 
 // app.use(bodyParser.urlencoded({
 //   extended: true

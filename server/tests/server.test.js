@@ -139,13 +139,17 @@ describe('PATCH /todos/:id' () => {
     var hexID = todos[1]._id.toHexString();
     request(app)
       .patch(`/todos/${hexID}`)
+      .send({
+        completed: true,
+        text: "new text"
+      }) //since its patch, you should send something
       .expect(200)
       .expect((res) => {
         expect(res.body.todo._id).toBe(hexID)
       })
       .end((err, result) => {
-        
-      }).catch(e => done(e))
+
+      }).catch(e => done(e)) //dont need this end cb since you sent the send method instead of creating your own test case here
   })
 
   it('should return 404 if object id isnt valid', (done) => {
