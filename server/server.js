@@ -38,6 +38,8 @@ app.post('/todos', (req, res) => {
   })
 })
 
+
+
 app.get('/todos', (req, res) => {
   Todo.find().then((todos) => {
     res.send({todos}) // don't just send an array, by putting it in an object you are more flexible to add more properties to the response
@@ -96,6 +98,17 @@ app.patch('/todos/:id', (req, res) => {
   }).catch((e) => {
     res.status(400).send();
   }) //methods for updating
+})
+
+
+app.post('/users', (req, res) => {
+  let body = new User(_.pick(req.body, ['email', 'password']))
+
+  body.save().then((doc) => {
+    res.status(200).send(doc)
+  }).catch((e) => {
+    res.status(404).send()
+  })
 })
 
 
