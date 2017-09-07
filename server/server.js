@@ -78,10 +78,11 @@ app.patch('/todos/:id', (req, res) => {
     body.completedAt = null;
   }
 
-  Todo.findByIdAndUpdate(id, {$set:body}, {new:true}).then((todo) => {
+  Todo.findByIdAndUpdate(id, {$set:body}, {new:true}).then((todo) => { //takes the ID, which mongo method to use, then options -- the "new" = option to show the updated object afterwards
     if (!todo) {
       return res.status(404).send();
     }
+    res.send({todo}) // same as {todo: todo}
   }).catch((e) => {
     res.status(400).send();
   }) //methods for updating
