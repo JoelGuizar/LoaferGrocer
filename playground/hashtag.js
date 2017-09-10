@@ -1,5 +1,6 @@
 const {SHA256} = require('crypto-js');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 jwt.sign //takes obj, and signs it, creates hash, and returns token value
 jwt.verify //does opposite, makes sure data wasnt manipulated
