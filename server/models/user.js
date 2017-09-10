@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 const UserSchema = new mongoose.Schema({
   //User can go here
-  {
+
     email: {
       type: String,
       required: true,
@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema({
         required: true
       }
     }]
-  }
+
 })
 
 //a custom method to generate token
@@ -65,7 +65,7 @@ UserSchema.methods.toJSON = function () {
   var userObject = user.toObject() //responsible for taking your mongoose variable, and creates an object to where the only ones available in the doc are there
 
   return _.pick(userObject, ['_id', 'email']) //making the new Object and selecting the attributes
-})
+}
 
 UserSchema.statics.findByToken = function (token) {
   let User = this; // this = model here, not the instance

@@ -117,7 +117,12 @@ app.post('/users', (req, res) => {
 app.get('/users/me', (req, res) =>{
   let token = req.header('x-auth') //req.header gets the value, as res.header SETS the value, so only pass in the key.
 
-  User.findByToken(token) //a schema method that you are going to create
+  User.findByToken(token).then((user) =>{
+    if (!user) {
+
+    }
+    res.send(user)
+  }) //a schema method that you are going to create
 })
 
 
