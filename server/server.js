@@ -6,6 +6,7 @@ const {mongoose} = require('./db/mongoose.js');
 const {Todo} = require ('./models/todo.js');
 const {User} = require('./models/user.js');
 const {ObjectId} = require('mongodb');
+const {authenticate} = require('./middleware/authenticate')
 
 const app = express();
 const PORT = 3000 || process.env.PORT //this process.env.port is how heroku can set the port for hosting
@@ -114,15 +115,12 @@ app.post('/users', (req, res) => {
   })
 })
 
-app.get('/users/me', (req, res) =>{
-  let token = req.header('x-auth') //req.header gets the value, as res.header SETS the value, so only pass in the key.
 
-  User.findByToken(token).then((user) =>{
-    if (!user) {
 
-    }
-    res.send(user)
-  }) //a schema method that you are going to create
+
+
+app.get('/users/me', authenticate, (req, res) =>{ //will use authenticate as a middleware first
+  res.send(req.user);
 })
 
 
