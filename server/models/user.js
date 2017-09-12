@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator'); //custom validation library
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   //User can go here
@@ -87,6 +88,25 @@ UserSchema.statics.findByToken = function (token) {
     "tokens.access": 'auth'
   })
 } //.statics is like .methods except the function turns into a MODEL methods INSTEAD of an INSTANCE method.
+
+
+UserSchema.pre('save', function(next){
+  let user = this; //since it will be different user information based on instance.
+
+  if (user.isModified('password')) { //checks if its already modified, so its not modified TWICE, since this event happens every time something is 'saved'
+    bcrypt.genSalt(10, (err, saltVal) => {
+      bcrypt.hash(user.password, saltVal, (err, res) => {
+        user.password = res;
+        next();
+      })
+    })
+
+
+} else {
+  next();
+}
+}) // a Schema life event middleware, this one is before(pre) some event, to run this code, then run next.
+// you use ES5 because you need the "THIS" binding.
 
 const User = mongoose.model('User', UserSchema)
 

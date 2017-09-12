@@ -2,18 +2,33 @@ const {SHA256} = require('crypto-js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-jwt.sign //takes obj, and signs it, creates hash, and returns token value
-jwt.verify //does opposite, makes sure data wasnt manipulated
+let pw = '123abc!';
+//
+// bcrypt.genSalt(10, (err, saltValue) => {
+//   bcrypt.hash(pw, saltValue, (err, hashValue) => {
+//     console.log(hashValue);
+//   })
+// }) //async func, args: number of rounds to generate salt, callback --- the larger the number the larger the salt algorithm
 
-let data = {
-  id: 10
-}
+let hashedpw = '$2a$10$wG1HcSrqliJlfMrgpTCS7eE8nhyXnOqGoyAW7IzL7gXFl7x1ym8yy'
 
-let token = jwt.sign(data, '123abc');
-console.log(token);
+bcrypt.compare(pw, hashedpw, (err, res) => {
+  console.log(res);
+}) //true or false depends if the first arg = the hashed arg
 
-let decoded = jwt.verify(token, '123abc')
-console.log(decoded); //if token chaned before calling verify, it will throw an error
+//
+// jwt.sign //takes obj, and signs it, creates hash, and returns token value
+// jwt.verify //does opposite, makes sure data wasnt manipulated
+//
+// let data = {
+//   id: 10
+// }
+//
+// let token = jwt.sign(data, '123abc');
+// console.log(token);
+//
+// let decoded = jwt.verify(token, '123abc')
+// console.log(decoded); //if token chaned before calling verify, it will throw an error
 
 //these methods ^^, do the same as vv
 
