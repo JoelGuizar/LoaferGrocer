@@ -3,10 +3,10 @@ const request = require('supertest');
 const {ObjectId} = require('mongodb');
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo')
-const {todos, populateTodos} = require('./seed/seed.js')
+const {todos, populateTodos, users, populateUsers} = require('./seed/seed.js')
 
-
-beforeEach(populateTodos) // test lifecycle method, this one let us run code BEFORE every single test case
+beforeEach(populateUsers);
+beforeEach(populateTodos); // test lifecycle method, this one let us run code BEFORE every single test case
 
 describe('POST /todos', () => {
 
@@ -46,7 +46,7 @@ describe('POST /todos', () => {
         }).catch(e => done(e)) //must catch since there's a bunch of async
       })
   })
-})
+});
 
 describe('GET /todos', ()=>{
   it('should get all todos', (done)=>{
@@ -86,7 +86,7 @@ describe('GET /todos/:id', ()=>{
       .end(done)
   })
 
-})
+});
 
 describe('DELETE /todos/:id', () =>{
   it('should remove a todo', (done) => {
@@ -149,4 +149,4 @@ describe('PATCH /todos/:id' () => {
       .expect(404)
       .end(done)
   })
-})
+});

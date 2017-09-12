@@ -44,4 +44,4 @@ const populateUsers = (done) => {
   }).then(() => done())
 };
 
-module.exports = {todos, populateTodos}
+module.exports = {todos, populateTodos, users, populateUsers}
