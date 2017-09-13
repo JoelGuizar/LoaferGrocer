@@ -204,10 +204,18 @@ describe('POST /users', () => {
   })
 
   it('should return validation errors if request invalid', (done) => {
-
+    //send invalid email, 400 back
+    request(app)
+      .post('/users')
+      .send({
+        email:'and',
+        password: '123'
+      })
+      .expect(400)
+      .end(done);
   });
 
   it('should not create user if email in use', (done) => {
-
+    //use email already taken,
   })
 })
