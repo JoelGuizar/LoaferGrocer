@@ -90,6 +90,31 @@ UserSchema.statics.findByToken = function (token) {
 } //.statics is like .methods except the function turns into a MODEL methods INSTEAD of an INSTANCE method.
 
 
+UserSchema.statics.findByCredentials = function (email, password){
+  let User = this;
+
+  User.findOne({email}).then((user) => {
+    if (!user) {
+      return Promise.reject();
+    }
+
+//bcrypt is callback based ONLY vvv this is how you make it into a promise so it returns a promise
+//reject triggers the catch
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          resolve();
+        } else {
+          reject();
+        }
+      })
+
+    })
+  })
+}
+
+
+
 UserSchema.pre('save', function(next){
   let user = this; //since it will be different user information based on instance.
 

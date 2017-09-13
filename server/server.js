@@ -123,6 +123,19 @@ app.get('/users/me', authenticate, (req, res) =>{ //will use authenticate as a m
   res.send(req.user);
 })
 
+//POST users login if they have token
+//when you sent a matching email, and pw that bcrypt compares with hashedpassword
+
+app.post('/users/login', (req, res) => {
+
+
+  User.findByCredentials(req.body.email, req.body.password).then((user) => {
+    res.send(user)
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
+
 
 app.listen(PORT, () => {
   console.log(`Started on port ${PORT}`);
