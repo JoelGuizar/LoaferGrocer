@@ -1,6 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 const {ObjectId} = require('mongodb');
+const {User} = require ('./../models/user');
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo')
 const {todos, populateTodos, users, populateUsers} = require('./seed/seed.js')
@@ -182,14 +183,24 @@ describe('POST /users', () => {
 
     request(app)
       .post('/users')
-      .send({email, password})
+      .send({email, pw})
       .expect(200)
       .expect((res) => {
         expect(res.headers['x-auth']).toExist(); //we use [] notation because there's a hyphen
         expect(res.body._id).toExist();
         expect(res.body.email).toBe(email);
       })
-      .end(done)
+      .end((err) => {
+        if (err) {
+          return done(err);
+        }
+
+        User.find({email}).then((user)=>{
+          expect(user).toExist();
+          expect(user.password).toNotBe(pw);
+          done();
+        })
+      })
   })
 
   it('should return validation errors if request invalid', (done) => {
