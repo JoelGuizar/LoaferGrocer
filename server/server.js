@@ -25,9 +25,10 @@ if (env === 'development'){
 // }))
 app.use(bodyParser.json()); // the bodyparser method we are using
 
-app.post('/todos', (req, res) => {
+app.post('/todos', authenticate, (req, res) => {
   var todo = new Todo({
-    text: req.body.text
+    text: req.body.text,
+    _creator: req.user._id
   })
 
   console.log(req.body.text);
@@ -42,18 +43,23 @@ app.post('/todos', (req, res) => {
 
 
 app.get('/todos', (req, res) => {
-  Todo.find().then((todos) => {
+  Todo.find({
+    _creator: req.user._id //find the Todos with the creator ID, so only person logged in will have access to those todos.
+  }).then((todos) => {
     res.send({todos}) // don't just send an array, by putting it in an object you are more flexible to add more properties to the response
   }, (e) => {res.status(400).send(e)})
 })
 
-app.get('/todos/:id', (req, res) => {
+app.get('/todos/:id', authenticate, (req, res) => {
   let id = req.params.id //will take the params.id from the request body, which is the :id
     if (!ObjectId.isValid(id)){
       return res.status(404).send();
     }
 
-    Todo.findById(id).then((todo) => {
+    Todo.findOne({
+      _id: id,
+      _creator: req.user._id //make sure they only see their Todos
+    }).then((todo) => {
       if (!todo){
         return res.status(404).send();
       }
@@ -61,7 +67,7 @@ app.get('/todos/:id', (req, res) => {
     }).catch(e => {res.status(400).send()})
 })
 
-app.delete('/todos/:id', (req, res) => {
+app.delete('/todos/:id', authenticate, (req, res) => {
   let id = req.params.id //where the URL parameter are stored.
   if (!ObjectId.isValid(id)){
     return res.status(404).send();

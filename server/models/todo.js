@@ -12,6 +12,10 @@ const Todo = mongoose.model('Todo', {
     type: Number,
     default: null
   }
+  _creator: {
+    type: mongoose.Schema.Types.ObjectId, // what we need to set our type to in order to set the creator property/objectId property
+    required: true
+  }
 })//mongoose model so mongoose knows how to store our Data,
 // first arg = name of mondel, second = object to specify the model
 // more options are available in the docs other than 'type'
