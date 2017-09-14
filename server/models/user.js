@@ -58,6 +58,21 @@ UserSchema.methods.generateAuthtoken = function (){
   })
 }  //how you add instance methods, need this
 
+UserSchema.methods.removeToken = function (token) {
+  //call an update method to update the token array //deleting it
+
+  //a mongodb operate $pull = take certain items of an array that matches criteria
+
+  let user = this;
+
+  user.update({
+    $pull: {
+      tokens: {  //we're gonna pull from the tokens array
+        token: token//we're gonna pull any criteria that === token argument passed here.
+      }
+    }
+  })
+}
 
 //custom method to OVERRIDE the json, so that only SOME info gets sent back
 
@@ -103,7 +118,7 @@ UserSchema.statics.findByCredentials = function (email, password){
     return new Promise((resolve, reject) => {
       bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
-          resolve(user);
+          resolve(user );
         } else {
           reject();
         }

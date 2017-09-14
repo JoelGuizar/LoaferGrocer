@@ -131,13 +131,23 @@ app.post('/users/login', (req, res) => {
 
   User.findByCredentials(req.body.email, req.body.password).then((user) => {
     user.generateAuthtoken().then((token) => {
-      res.header('x-auth', token).send(user) 
+      res.header('x-auth', token).send(user)
     })
   }).catch((e) => {
     res.status(400).send();
   })
 })
 
+
+app.delete('/users/me/token', authenticate, (req, res) => {
+  //to remove a token all we need to do is call an instance method/create one
+
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    res.status(400).send();
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`Started on port ${PORT}`);
