@@ -73,7 +73,9 @@ app.delete('/todos/:id', authenticate, (req, res) => {
     return res.status(404).send();
   }
 
-  Todo.findByIdAndRemove(id).then((todo) => {
+  Todo.findOneAndRemove({
+    _id: id, _creator: req.user._id
+  }).then((todo) => {
     if (!todo){
       return rest.status(404).send();
     }
@@ -97,7 +99,7 @@ app.patch('/todos/:id', (req, res) => {
     body.completedAt = null;
   }
 
-  Todo.findByIdAndUpdate(id, {$set:body}, {new:true}).then((todo) => { //takes the ID, which mongo method to use, then options -- the "new" = option to show the updated object afterwards
+  Todo.findByOneAndUpdate({_id:id, _creator:req.user._id}, {$set:body}, {new:true}).then((todo) => { //takes the ID, which mongo method to use, then options -- the "new" = option to show the updated object afterwards
     if (!todo) {
       return res.status(404).send();
     }
