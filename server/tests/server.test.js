@@ -7,7 +7,8 @@ const {Todo} = require('./../models/todo')
 const {todos, populateTodos, users, populateUsers} = require('./seed/seed.js')
 
 beforeEach(populateUsers);
-beforeEach(populateTodos); // test lifecycle method, this one let us run code BEFORE every single test case
+// test lifecycle method, this one let us run code BEFORE every single test case
+beforeEach(populateTodos);
 
 describe('POST /todos', () => {
 
@@ -23,13 +24,19 @@ describe('POST /todos', () => {
       .expect((res) => {
         expect(res.body.text).toBe(text)
       })
-      .end((err, res) => {   //checks what actually got stored in the mongodb, this is why we required the model in order to test the database too after
-        if (err) return done(err) //handles if errors, if it does it'll wrap it with done
-        Todo.find({text}).then((todos)=>{ //makes request to DB to make sure it was added (since theres not error at this point)
-          expect(todos.length).toBe(1);  //assertion
+      //checks what actually got stored in the mongodb, this is why we required the model in order to test the database too after
+      .end((err, res) => {
+        //handles if errors, if it does it'll wrap it with done
+        if (err) return done(err)
+        //makes request to DB to make sure it was added (since theres not error at this point)
+        Todo.find({text}).then((todos)=>{
+          //assertion
+          expect(todos.length).toBe(1);
           expect(todos[0].text).toBe(text);
-          done(); //remember you need done for any asynchronous code so it waits!
-        }).catch((e) => done(e)); //it'll get any errors that might occur inside the callback, if so, then it'll call done
+          //remember you need 'done' for any asynchronous code so it waits!
+          done();
+          //it'll get any errors that might occur inside the callback, if so, then it'll call done
+        }).catch((e) => done(e));
       })
   })
 
@@ -44,7 +51,8 @@ describe('POST /todos', () => {
         Todo.find().then((todos) => {
           expect(todos.length).toBe(2);
           done();
-        }).catch(e => done(e)) //must catch since there's a bunch of async
+          //must catch since there's a bunch of async chaining
+        }).catch(e => done(e))
       })
   })
 });
@@ -54,7 +62,8 @@ describe('GET /todos', ()=>{
     request(app)
       .get('/todos')
       .expect(200)
-      .expect((res) => { //creating a custom assertion with this cb with response
+      //creating a custom assertion with this cb w/response.
+      .expect((res) => {
         expect(res.body.todos.length).toBe(2)
       })
       .end(done)
@@ -62,9 +71,11 @@ describe('GET /todos', ()=>{
 })
 
 describe('GET /todos/:id', ()=>{
-  it('should return todo doc', (done)=>{ //specifies an aysnc test
+  //specifies an aysnc test
+  it('should return todo doc', (done)=>{
     request(app)
-      .get(`/todos/${todos[0]._id.toHexString()}`) //to convert object id to string = to HexString(), we are using the todos test case up top
+    //to convert object id to string = to HexString(), we are using the todos test case up top
+      .get(`/todos/${todos[0]._id.toHexString()}`)
         .expect(200)
         .expect((res) =>{
           expect(res.body.todo.text).toBe(todos[0].text)
@@ -75,14 +86,16 @@ describe('GET /todos/:id', ()=>{
   it('should return 404 if todo not found', (done) => {
     let nid = new ObjectId().toHexString()
     request(app)
-      .get(`/todos/${nid}`)  //make a new ID and see if its not found
+    //make a new ID and see if its not found
+      .get(`/todos/${nid}`)
       .expect(404)
       .end(done)
   })
 
   it('should return 404 for non-object ids', (done) => {
     request(app)
-      .get('/todos/123abc') ///a bad url for IDs
+    ///a bad url for IDs
+      .get('/todos/123abc')
       .expect(404)
       .end(done)
   })
@@ -100,7 +113,8 @@ describe('DELETE /todos/:id', () =>{
           expect(res.body.todo._id).toBe(hexID)
         })
         .end((err, res) => {
-          if (err) return done(err) //so error gets rendered by mocha
+          //so error gets rendered by mocha
+          if (err) return done(err)
 
           Todo.findById(hexID).then((doc) =>{
             expect(todo).toNotExist();
@@ -112,14 +126,16 @@ describe('DELETE /todos/:id', () =>{
   it('should return 404 if todo not found', (done) =>{
     let nid = new ObjectId().toHexString()
     request(app)
-      .delete(`/todos/${nid}`)  //make a new ID and see if its not found
+    //make a new ID and see if its not found
+      .delete(`/todos/${nid}`)
       .expect(404)
       .end(done)
   });
 
   it('should return 404 if object id is invalid', (done) =>{
     request(app)
-      .delete('/todos/123abc') ///a bad url for IDs
+     ///a bad url for IDs
+      .delete('/todos/123abc')
       .expect(404)
       .end(done)
   });
@@ -139,8 +155,8 @@ describe('PATCH /todos/:id' () => {
         expect(res.body.todo._id).toBe(hexID)
       })
       .end((err, result) => {
-
-      }).catch(e => done(e)) //dont need this end cb since you sent the send method instead of creating your own test case here
+        //dont need this end cb since you sent the send method instead of creating your own test case here
+      }).catch(e => done(e))
   })
 
   it('should return 404 if object id isnt valid', (done) => {
@@ -156,7 +172,8 @@ describe('GET /users/me', () => {
   it('should return user if authenticated', (done)=>{
     request(app)
       .get('/users/me')
-      .set('x-auth', users[0].tokens[0].token)  //how to set a header, first arg is name of header, then 2nd is value
+      //how to set a header, first arg is name of header, then 2nd is value
+      .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .expect((res) => {
         expect(res.body._id).toBe(users[0]._id.toHexString())

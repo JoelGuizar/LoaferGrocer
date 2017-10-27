@@ -44,9 +44,11 @@ app.post('/todos', authenticate, (req, res) => {
 
 app.get('/todos', (req, res) => {
   Todo.find({
-    _creator: req.user._id //find the Todos with the creator ID, so only person logged in will have access to those todos.
+    //find the Todos with the creator ID, so only person logged in will have access to those todos.
+    _creator: req.user._id
   }).then((todos) => {
-    res.send({todos}) // don't just send an array, by putting it in an object you are more flexible to add more properties to the response
+    // don't just send an array, by putting it in an object you are more flexible to add more properties to the response
+    res.send({todos})
   }, (e) => {res.status(400).send(e)})
 })
 

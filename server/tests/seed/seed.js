@@ -48,8 +48,9 @@ const populateUsers = (done) => {
   Todo.remove({}).then(() => {
     let userOne = new User(user[0]).save();
     let userTwo = new User(user[1]).save();
-
-    return Promise.all([userOne,userTwo])  //when you need to both above to succeed, promise.all takes an array of promises, then you can call then -- it'll get call once all the promises resolve
+    // when you need to both above to succeed, promise.all takes an array of promises,
+    // then you can call then -- it'll get call once all the promises resolve
+    return Promise.all([userOne,userTwo])
   }).then(() => done())
 };
 
