@@ -60,7 +60,6 @@ UserSchema.methods.generateAuthtoken = function (){
 
 UserSchema.methods.removeToken = function (token) {
   //call an update method to update the token array //deleting it
-
   //a mongodb operate $pull = take certain items of an array that matches criteria
 
   let user = this;

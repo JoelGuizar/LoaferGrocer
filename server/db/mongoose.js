@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
-const MONGODB_URI =
+//const MONGODB_URI =
 
 //we have to describe that we are gonna use the mongoose promise library
 mongoose.Promise = global.Promise
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/TodoApp', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/GrocApp', {
   useMongoClient: true
 }) //stays connected
 
