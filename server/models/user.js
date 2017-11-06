@@ -94,7 +94,7 @@ UserSchema.statics.findByToken = function (token) {
     })// a promise so the subsequent code doesnt get returned/runs
   }
 
-  //if success decoded after try //
+  //if success decoded after try 
 
   return User.findOne({
     _id: decoded._id,

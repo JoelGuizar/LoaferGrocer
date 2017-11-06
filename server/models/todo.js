@@ -13,7 +13,8 @@ const Todo = mongoose.model('Todo', {
     default: null
   }
   _creator: {
-    type: mongoose.Schema.Types.ObjectId, // what we need to set our type to in order to set the creator property/objectId property
+    // what we need to set our type to in order to set the creator property/objectId property
+    type: mongoose.Schema.Types.ObjectId,
     required: true
   }
 })//mongoose model so mongoose knows how to store our Data,

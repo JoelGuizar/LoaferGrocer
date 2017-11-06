@@ -203,7 +203,8 @@ describe('POST /users', () => {
       .send({email, pw})
       .expect(200)
       .expect((res) => {
-        expect(res.headers['x-auth']).toExist(); //we use [] notation because there's a hyphen
+        //we use [] notation because there's a hyphen
+        expect(res.headers['x-auth']).toExist();
         expect(res.body._id).toExist();
         expect(res.body.email).toBe(email);
       })

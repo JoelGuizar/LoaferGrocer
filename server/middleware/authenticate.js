@@ -12,8 +12,8 @@ const authenticate = (req, res, next) => {
     req.user = user;
     req.token = token;
     res.send(user)
-    next(); // MUST CALL NEXT so the next CALL BACK gets called, which is the (req, res) => {} in the get route!
-  }) //a schema method that you are going to create
+    next();
+  })
     .catch((e) => {
       res.status(401).send()
     })

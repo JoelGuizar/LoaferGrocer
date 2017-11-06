@@ -9,20 +9,22 @@ const {ObjectId} = require('mongodb');
 const {authenticate} = require('./middleware/authenticate')
 
 const app = express();
-const PORT = 3000 || process.env.PORT //this process.env.port is how heroku can set the port for hosting
 
+//this process.env.port is how heroku can set the port for hosting
+const PORT = 3000 || process.env.PORT
 if (env === 'development'){
   process.env.PORT = 3000;
   process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp'
 } else if (env === 'test'){
   process.env.PORT = 3000;
-  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest' // if /else statement dependendent on which mode you are on!
+  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest'
 }
 
 
 // app.use(bodyParser.urlencoded({
 //   extended: true
 // }))
+
 app.use(bodyParser.json()); // the bodyparser method we are using
 
 app.post('/todos', authenticate, (req, res) => {
@@ -53,14 +55,16 @@ app.get('/todos', (req, res) => {
 })
 
 app.get('/todos/:id', authenticate, (req, res) => {
-  let id = req.params.id //will take the params.id from the request body, which is the :id
+  let id = req.params.id
+  //will take the params.id from the request body, which is the :id
     if (!ObjectId.isValid(id)){
       return res.status(404).send();
     }
 
     Todo.findOne({
       _id: id,
-      _creator: req.user._id //make sure they only see their Todos
+      //make sure they only see their Todos
+      _creator: req.user._id
     }).then((todo) => {
       if (!todo){
         return res.status(404).send();
@@ -70,7 +74,8 @@ app.get('/todos/:id', authenticate, (req, res) => {
 })
 
 app.delete('/todos/:id', authenticate, (req, res) => {
-  let id = req.params.id //where the URL parameter are stored.
+  //where the URL parameter are stored.
+  let id = req.params.id
   if (!ObjectId.isValid(id)){
     return res.status(404).send();
   }
@@ -88,7 +93,8 @@ app.delete('/todos/:id', authenticate, (req, res) => {
 
 app.patch('/todos/:id', (req, res) => {
   const id = req.params.id;
-  let body = _.pick(req.body, ['text', 'completed']) //takes obj, then array of properties you cann pull off
+  //takes obj, then array of properties you can pull off
+  let body = _.pick(req.body, ['text', 'completed'])
 
   if(!ObjectId.isValid(id)){
     return res.status(404).send();
@@ -105,7 +111,7 @@ app.patch('/todos/:id', (req, res) => {
     if (!todo) {
       return res.status(404).send();
     }
-    res.send({todo}) // same as {todo: todo}
+    res.send({todo})
   }).catch((e) => {
     res.status(400).send();
   }) //methods for updating
@@ -119,7 +125,8 @@ app.post('/users', (req, res) => {
     return body.generateAuthtoken();
     //res.status(200).send(doc)
   }).then((token) => {
-    res.header('x-auth', token).send(body) //setting auth token as header, header name //x-auth = custom header, second = value
+    //setting auth token as header, header name //x-auth = custom header, second = value
+    res.header('x-auth', token).send(body)
   }).catch((e) => {
     res.status(404).send()
   })
@@ -128,14 +135,13 @@ app.post('/users', (req, res) => {
 
 
 
-
-app.get('/users/me', authenticate, (req, res) =>{ //will use authenticate as a middleware first
+//will use authenticate as a middleware first
+app.get('/users/me', authenticate, (req, res) =>{
   res.send(req.user);
 })
 
 //POST users login if they have token
 //when you sent a matching email, and pw that bcrypt compares with hashedpassword
-
 app.post('/users/login', (req, res) => {
 
 
