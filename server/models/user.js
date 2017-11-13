@@ -61,7 +61,6 @@ UserSchema.methods.generateAuthtoken = function (){
 UserSchema.methods.removeToken = function (token) {
   //call an update method to update the token array //deleting it
   //a mongodb operate $pull = take certain items of an array that matches criteria
-
   let user = this;
 
   user.update({
@@ -73,8 +72,7 @@ UserSchema.methods.removeToken = function (token) {
   })
 }
 
-//custom method to OVERRIDE the json, so that only SOME info gets sent back
-
+//custom method to OVERRIDE the json, so that only some info gets sent back
 UserSchema.methods.toJSON = function () {
   var user = this; //readability
   var userObject = user.toObject() //responsible for taking your mongoose variable, and creates an object to where the only ones available in the doc are there
@@ -94,7 +92,7 @@ UserSchema.statics.findByToken = function (token) {
     })// a promise so the subsequent code doesnt get returned/runs
   }
 
-  //if success decoded after try 
+  //if success decoded after try
 
   return User.findOne({
     _id: decoded._id,
@@ -112,7 +110,7 @@ UserSchema.statics.findByCredentials = function (email, password){
       return Promise.reject();
     }
 
-//bcrypt is callback based ONLY vvv this is how you make it into a promise so it returns a promise
+//bcrypt is callback based only, below is bcrypt being made into a Promise.
 //reject triggers the catch
     return new Promise((resolve, reject) => {
       bcrypt.compare(password, user.password, (err, res) => {

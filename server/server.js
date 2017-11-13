@@ -33,8 +33,6 @@ app.post('/todos', authenticate, (req, res) => {
     _creator: req.user._id
   })
 
-  console.log(req.body.text);
-
   todo.save().then((doc) => {
     res.send(doc)
   }, (e) => {
